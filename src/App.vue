@@ -192,7 +192,6 @@
             }
         },
         mounted: function () {
-            alert(123);
             this.index = this.layout.length;
         },
         methods: {

@@ -309,6 +309,7 @@
             }
         },
         mounted: function () {
+            alert(123);
             if (this.layout.responsive && this.layout.lastBreakpoint) {
                 this.cols = getColsFromBreakpoint(this.layout.lastBreakpoint, this.layout.cols);
             } else {
