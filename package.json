@@ -1,6 +1,6 @@
 {
   "name": "vue-grid-layout",
-  "version": "2.3.12",
+  "version": "3.0.0-beta1",
   "description": "A draggable and resizable grid layout, as a Vue component.",
   "keywords": [
     "grid",
@@ -29,30 +29,27 @@
     "test:cover": "vue-cli-service test:unit --coverage"
   },
   "dependencies": {
-    "element-resize-detector": "^1.2.1",
-    "@interactjs/interactjs": "^1.10.2",
-    "@interactjs/auto-start": "^1.10.2",
     "@interactjs/actions": "^1.10.2",
+    "@interactjs/auto-start": "^1.10.2",
+    "@interactjs/dev-tools": "^1.10.2",
+    "@interactjs/interactjs": "^1.10.2",
     "@interactjs/modifiers": "^1.10.2",
-    "@interactjs/dev-tools": "^1.10.2"
+    "element-resize-detector": "^1.2.1",
+    "mitt": "^2.1.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.12.11",
     "@vue/cli-plugin-babel": "^3.4.1",
     "@vue/cli-plugin-eslint": "^3.4.1",
-    "@vue/cli-plugin-unit-jest": "^4.5.10",
-    "@vue/cli-service": "^3.4.1",
-    "@vue/eslint-config-standard": "^3.0.5",
-    "@vue/test-utils": "^1.1.2",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "^26.6.3",
-    "babel-plugin-transform-flow-comments": "^6.7.0",
+    "@vue/cli-plugin-unit-jest": "^4.5.11",
+    "@vue/cli-service": "^4.5.10",
+    "@vue/compiler-sfc": "^3.0.5",
+    "babel-plugin-transform-flow-comments": "^6.22.0",
+    "eslint-plugin-vue": "^7.5.0",
     "node-sass": "^4.13.0",
     "rimraf": "^2.6.2",
-    "sass-loader": "^7.0.1",
-    "vue": "^2.6.12",
+    "sass-loader": "^10.1.1",
+    "vue": "^3.0.0",
     "vue-jest": "^3.0.7",
-    "vue-template-compiler": "^2.6.12",
     "webpack-bundle-analyzer": "^3.9.0"
   }
 }

@@ -11,6 +11,7 @@
 </template>
 <style>
     .vue-grid-item {
+        touch-action: none;
         transition: all 200ms ease;
         transition-property: left, top, right;
         /* add right for rtl */
@@ -243,7 +244,7 @@
         created () {
             let self = this;
 
-            // Accessible refernces of functions for removing in beforeDestroy
+            // Accessible refernces of functions for removing in beforeUnmount
             self.updateWidthHandler = function (width) {
                 self.updateWidth(width);
             };
@@ -281,34 +282,33 @@
                self.cols = parseInt(colNum);
             }
 
-            this.eventBus.$on('updateWidth', self.updateWidthHandler);
-            this.eventBus.$on('compact', self.compactHandler);
-            this.eventBus.$on('setDraggable', self.setDraggableHandler);
-            this.eventBus.$on('setResizable', self.setResizableHandler);
-            this.eventBus.$on('setRowHeight', self.setRowHeightHandler);
-            this.eventBus.$on('setMaxRows', self.setMaxRowsHandler);
-            this.eventBus.$on('directionchange', self.directionchangeHandler);
-            this.eventBus.$on('setColNum', self.setColNum)
+            this.eventBus.on('updateWidth', self.updateWidthHandler);
+            this.eventBus.on('compact', self.compactHandler);
+            this.eventBus.on('setDraggable', self.setDraggableHandler);
+            this.eventBus.on('setResizable', self.setResizableHandler);
+            this.eventBus.on('setRowHeight', self.setRowHeightHandler);
+            this.eventBus.on('setMaxRows', self.setMaxRowsHandler);
+            this.eventBus.on('directionchange', self.directionchangeHandler);
+            this.eventBus.on('setColNum', self.setColNum)
 
             this.rtl = getDocumentDir() === 'rtl';
         },
-        beforeDestroy: function(){
+        beforeUnmount: function(){
             let self = this;
             //Remove listeners
-            this.eventBus.$off('updateWidth', self.updateWidthHandler);
-            this.eventBus.$off('compact', self.compactHandler);
-            this.eventBus.$off('setDraggable', self.setDraggableHandler);
-            this.eventBus.$off('setResizable', self.setResizableHandler);
-            this.eventBus.$off('setRowHeight', self.setRowHeightHandler);
-            this.eventBus.$off('setMaxRows', self.setMaxRowsHandler);
-            this.eventBus.$off('directionchange', self.directionchangeHandler);
-            this.eventBus.$off('setColNum', self.setColNum);
+            this.eventBus.off('updateWidth', self.updateWidthHandler);
+            this.eventBus.off('compact', self.compactHandler);
+            this.eventBus.off('setDraggable', self.setDraggableHandler);
+            this.eventBus.off('setResizable', self.setResizableHandler);
+            this.eventBus.off('setRowHeight', self.setRowHeightHandler);
+            this.eventBus.off('setMaxRows', self.setMaxRowsHandler);
+            this.eventBus.off('directionchange', self.directionchangeHandler);
+            this.eventBus.off('setColNum', self.setColNum);
             if (this.interactObj) {
                 this.interactObj.unset() // destroy interact intance
             }
         },
         mounted: function () {
-            alert(123);
             if (this.layout.responsive && this.layout.lastBreakpoint) {
                 this.cols = getColsFromBreakpoint(this.layout.lastBreakpoint, this.layout.cols);
             } else {
@@ -577,7 +577,7 @@
                 if (event.type === "resizeend" && (this.previousW !== this.innerW || this.previousH !== this.innerH)) {
                     this.$emit("resized", this.i, pos.h, pos.w, newSize.height, newSize.width);
                 }
-                this.eventBus.$emit("resizeEvent", event.type, this.i, this.innerX, this.innerY, pos.h, pos.w);
+                this.eventBus.emit("resizeEvent", {eventType: event.type, i: this.i, x: this.innerX, y: this.innerY, h: pos.h, w: pos.w});
             },
             handleDrag(event) {
                 if (this.static) return;
@@ -660,7 +660,7 @@
                 if (event.type === "dragend" && (this.previousX !== this.innerX || this.previousY !== this.innerY)) {
                     this.$emit("moved", this.i, pos.x, pos.y);
                 }
-                this.eventBus.$emit("dragEvent", event.type, this.i, pos.x, pos.y, this.innerH, this.innerW);
+                this.eventBus.emit("dragEvent", {eventType: event.type, i: this.i, x: pos.x, y: pos.y, h: this.innerH, w: this.innerW});
             },
             calcPosition: function (x, y, w, h) {
                 const colWidth = this.calcColWidth();
@@ -849,7 +849,7 @@
                 this.previousW = this.innerW;
                 this.previousH = this.innerH;
 
-                let newSize=this.$slots.default[0].elm.getBoundingClientRect();
+                let newSize=this.$slots().default[0].elm.getBoundingClientRect();
                 let pos = this.calcWH(newSize.height, newSize.width, true);
                 if (pos.w < this.minW) {
                     pos.w = this.minW;
@@ -879,7 +879,7 @@
                 }
                 if (this.previousW !== pos.w || this.previousH !== pos.h) {
                     this.$emit("resized", this.i, pos.h, pos.w, newSize.height, newSize.width);
-                    this.eventBus.$emit("resizeEvent", "resizeend", this.i, this.innerX, this.innerY, pos.h, pos.w);
+                    this.eventBus.emit("resizeEvent", {eventType: "resizeend", i: this.i, x: this.innerX, y: this.innerY, h: pos.h, w: pos.w});
                 }
             }
         },
